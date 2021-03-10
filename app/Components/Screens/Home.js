@@ -25,6 +25,7 @@ import {useNavigation} from '@react-navigation/core';
 var {width, height} = Dimensions.get('window');
 
 export default function Home() {
+  const value = useState(new Animated.ValueXY({x: 0, y: 0}))[0];
   const navigation = useNavigation();
   const [todos, setTodos] = useState([
     {
@@ -180,33 +181,33 @@ export default function Home() {
   ]);
 
   // doc du lieu tu firestore day vao flatlist
-  // const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  // const [users, setUsers] = useState([]); // Initial empty array of users
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [users, setUsers] = useState([]); // Initial empty array of users
 
-  // useEffect(() => {
-  //   const subscriber = firestore()
-  //     .collection('users')
-  //     .onSnapshot((querySnapshot) => {
-  //       const users = [];
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .onSnapshot((querySnapshot) => {
+        const users = [];
 
-  //       querySnapshot.forEach((documentSnapshot) => {
-  //         users.push({
-  //           ...documentSnapshot.data(),
-  //           key: documentSnapshot.id,
-  //         });
-  //       });
-  //       console.log('user', users);
-  //       setUsers(users);
-  //       // setLoading(false);
-  //     });
+        querySnapshot.forEach((documentSnapshot) => {
+          users.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+        console.log('user', users);
+        setUsers(users);
+        setLoading(false);
+      });
 
-  //   // Unsubscribe from events when no longer in use
-  //   return () => subscriber();
-  // }, []);
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
 
-  // if (loading) {
-  //   return <ActivityIndicator />;
-  // }
+  if (loading) {
+    return <ActivityIndicator />;
+  }
   //----------------------------------------------------------------
   const pressHandler = (key, item) => {
     navigation.push('Chat', {item});
@@ -217,8 +218,6 @@ export default function Home() {
     //cham button chinh sua
     navigation.push('Edit');
   };
-
-  const value = useState(new Animated.ValueXY({x: 0, y: 0}))[0];
 
   var previousOffset = 0; //vị trí cuộn trước đó
   var ShowButton = true;
@@ -258,7 +257,7 @@ export default function Home() {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.list}>
-          <FlatList
+          {/* <FlatList
             onScroll={(event) => {
               handleScroll(event);
             }}
@@ -269,9 +268,12 @@ export default function Home() {
                 pressHandler={(key) => pressHandler(key, item)}
               />
             )}
-          />
+          /> */}
 
-          {/* <FlatList
+          <FlatList
+            onScroll={(event) => {
+              handleScroll(event);
+            }}
             data={users}
             renderItem={({item}) => (
               <ChatItem
@@ -280,7 +282,7 @@ export default function Home() {
               />
             )}
             extraData={users}
-          /> */}
+          />
         </View>
       </View>
       <Animated.View style={value.getLayout()}>
