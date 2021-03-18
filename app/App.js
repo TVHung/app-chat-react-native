@@ -167,7 +167,11 @@ export default function App() {
             name="Drawer"
             component={DrawerNavigation}
           />
-          <Stack.Screen name="Chat" component={DetailChat} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Chat"
+            component={DetailChat}
+          />
           <Stack.Screen name="Edit" component={Edit} />
         </Stack.Navigator>
       </NavigationContainer>

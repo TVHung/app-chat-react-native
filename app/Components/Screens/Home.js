@@ -25,160 +25,8 @@ import {useNavigation} from '@react-navigation/core';
 var {width, height} = Dimensions.get('window');
 
 export default function Home() {
-  const value = useState(new Animated.ValueXY({x: 0, y: 0}))[0];
+  const value = new Animated.ValueXY({x: 0, y: 0});
   const navigation = useNavigation();
-  const [todos, setTodos] = useState([
-    {
-      avatar: 'avatar',
-      name: 'Truong Hung',
-      key: '1',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Tan Sang',
-      key: '2',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Hoan',
-      key: '3',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '4',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '5',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '6',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '7',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '8',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Hoan',
-      key: '9',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '10',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '11',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '12',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Truong Hung',
-      key: '13',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Tan Sang',
-      key: '14',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '15',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Truong Hung',
-      key: '16',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Tan Sang',
-      key: '17',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Hoan',
-      key: '18',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '19',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '20',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '21',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '22',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '23',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Hoan',
-      key: '24',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Truong Hung',
-      key: '25',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Tan Sang',
-      key: '26',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '27',
-    },
-    {
-      avatar: 'avatar',
-      name: 'Truong Hung',
-      key: '28',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Tan Sang',
-      key: '29',
-    },
-    {
-      avatar: 'avatar1',
-      name: 'Hoan',
-      key: '30',
-    },
-  ]);
 
   // doc du lieu tu firestore day vao flatlist
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
@@ -186,21 +34,18 @@ export default function Home() {
 
   useEffect(() => {
     const subscriber = firestore()
-      .collection('users')
+      .collection('Users')
       .onSnapshot((querySnapshot) => {
         const users = [];
-
         querySnapshot.forEach((documentSnapshot) => {
           users.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
-        console.log('user', users);
         setUsers(users);
         setLoading(false);
       });
-
     // Unsubscribe from events when no longer in use
     return () => subscriber();
   }, []);
@@ -220,11 +65,9 @@ export default function Home() {
   };
 
   var previousOffset = 0; //vị trí cuộn trước đó
-  var ShowButton = true;
   const handleScroll = (event) => {
     //kiem tra xem la dang cuon len hay cuon xuong
     var currentOffset = event.nativeEvent.contentOffset.y;
-    var direction;
     if (currentOffset === 0) {
       var ShowButton = true;
     }
@@ -252,24 +95,10 @@ export default function Home() {
     }
     previousOffset = currentOffset;
   };
-  console.log('reder list');
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.list}>
-          {/* <FlatList
-            onScroll={(event) => {
-              handleScroll(event);
-            }}
-            data={todos}
-            renderItem={({item}) => (
-              <ChatItem
-                item={item}
-                pressHandler={(key) => pressHandler(key, item)}
-              />
-            )}
-          /> */}
-
           <FlatList
             onScroll={(event) => {
               handleScroll(event);
@@ -304,6 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: backgroundLight,
   },
   content: {
+    flex: 1,
     paddingLeft: 10,
     paddingRight: 10,
   },

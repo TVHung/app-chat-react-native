@@ -22,7 +22,7 @@ import {
 function getUsers() {
   //read
   // firestore()
-  //   .collection('users')
+  //   .collection('Users')
   //   .get()
   //   .then((querySnapshot) => {
   //     console.log('Total users: ', querySnapshot.size);
@@ -32,14 +32,33 @@ function getUsers() {
   //   });
   //write
   // firestore()
-  //   .collection('users')
+  //   .collection('ChatTest')
   //   .add({
-  //     id: 3,
-  //     name: 'Truong Thi Hoan',
+  //     name: 'Truong Tan Sang',
+  //     _id: 2,
+  //     _id_receive: 1,
+  //     create_at: '',
+  //     name_receive: 'Tan',
+  //     text: 'Xin chao tat ca cac ban, toi la react native',
   //   })
   //   .then(() => {
   //     console.log('User added!');
   //   });
+  // firestore()
+  //   .collection('Messages')
+  //   .get()
+  //   .then((querySnapshot) => {
+  //     console.log('Total users: ', querySnapshot.size);
+  //     querySnapshot.forEach((documentSnapshot) => {
+  //       console.log('User ID: ', documentSnapshot.id, documentSnapshot.data());
+  //     });
+  //   });
+  // firestore().collection('Users').add({
+  //   id: 15,
+  //   name: 'ABC',
+  //   email: 'a@gmail.com',
+  //   avatar: 'https://placeimg.com/140/140/nature',
+  // });
 }
 
 export default function Edit() {
@@ -49,7 +68,7 @@ export default function Edit() {
 
   useEffect(() => {
     const subscriber = firestore()
-      .collection('users')
+      .collection('Users')
       .onSnapshot((querySnapshot) => {
         const users = [];
 

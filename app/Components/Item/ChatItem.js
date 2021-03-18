@@ -1,18 +1,14 @@
 import React from 'react';
-import {
-  themeColor,
-  backgroundLight,
-  backgroundDark,
-  ChatItemDark,
-  TextLight,
-  ChatItemLight,
-  TextDark,
-} from '../Theme/color';
+import {ChatItemLight, TextDark} from '../Theme/color';
 import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'; //icon
 
 export default function ChatItem({item, pressHandler}) {
   var avtName = item.avatar;
   var avtUrl = '../../assets/images/' + 'avatar1' + '.jpg';
+
+  // const [users, setUsers] = useState([]);
+
   return (
     <TouchableOpacity onPress={() => pressHandler(item.key)}>
       <View style={styles.item}>
@@ -20,8 +16,17 @@ export default function ChatItem({item, pressHandler}) {
           <Image source={require(avtUrl)} style={styles.itemAvatar} />
         </View>
         <View style={styles.itemText}>
-          <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemMess}>Message</Text>
+          <View style={styles.topName}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <View style={styles.timeCheck}>
+              <Text>
+                <Icon name="check" size={20} color="#13bd27" />
+                {/* <Icon style={iconDot} name="circle" size={10} color="#13bd27" /> */}
+              </Text>
+              <Text>Feb 24</Text>
+            </View>
+          </View>
+          <Text style={styles.itemMess}>Old messages</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -53,11 +58,21 @@ const styles = StyleSheet.create({
     flex: 8,
     marginLeft: 10,
   },
+  topName: {
+    flexDirection: 'row',
+  },
   itemName: {
     color: TextDark,
     fontWeight: 'bold',
+    flex: 8,
+  },
+  timeCheck: {
+    flex: 2,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   itemMess: {
-    color: TextDark,
+    marginTop: 5,
+    color: 'grey',
   },
 });
