@@ -54,8 +54,8 @@ function getUsers() {
   //     });
   //   });
   // firestore().collection('Users').add({
-  //   id: 15,
-  //   name: 'ABC',
+  //   id: 1,
+  //   name: 'Truong Hung',
   //   email: 'a@gmail.com',
   //   avatar: 'https://placeimg.com/140/140/nature',
   // });

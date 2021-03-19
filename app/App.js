@@ -31,6 +31,8 @@ import Profile from './Components/Screens/Profile';
 import Edit from './Components/Screens/Edit';
 import Setting from './Components/Screens/Setting';
 import {DrawerContent} from './Components/Item/DrawerContent';
+import Login from './Components/Screens/Login';
+import Signup from './Components/Screens/Signup';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
@@ -161,7 +163,9 @@ export default function App() {
   return (
     <PaperProvider theme={PaperDarkTheme}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Drawer" headerMode="none">
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen
             options={{headerShown: false}}
             name="Drawer"

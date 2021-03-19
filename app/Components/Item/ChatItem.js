@@ -17,7 +17,9 @@ export default function ChatItem({item, pressHandler}) {
         </View>
         <View style={styles.itemText}>
           <View style={styles.topName}>
-            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemName}>
+              {item.name} {item.id}
+            </Text>
             <View style={styles.timeCheck}>
               <Text>
                 <Icon name="check" size={20} color="#13bd27" />

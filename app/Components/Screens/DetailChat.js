@@ -13,6 +13,7 @@ export default function DetailChat() {
 
   const [messages, setMessages] = useState([]);
 
+  //change style box chat
   function renderBubble(props) {
     return (
       // Step 3: return the component
@@ -33,6 +34,7 @@ export default function DetailChat() {
     );
   }
 
+  //change style icon send
   function renderSend(props) {
     return (
       <Send {...props}>
@@ -43,6 +45,7 @@ export default function DetailChat() {
     );
   }
 
+  //change style scroll
   function scrollToBottomComponent() {
     return (
       <View style={styles.bottomComponentContainer}>
