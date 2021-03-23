@@ -163,7 +163,7 @@ export default function App() {
   return (
     <PaperProvider theme={PaperDarkTheme}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Drawer" headerMode="none">
+        <Stack.Navigator initialRouteName="Login" headerMode="none">
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen

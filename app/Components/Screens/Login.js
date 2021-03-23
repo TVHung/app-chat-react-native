@@ -4,10 +4,10 @@ import {Title} from 'react-native-paper';
 import FormInput from '../Layout/FormInput';
 import FormButton from '../Layout/FormButton';
 import {themeColor, backgroundLight, backgroundDark} from '../Theme/color';
-// import { AuthContext } from '../navigation/AuthProvider';
+import { AuthContext } from '../navigation/AuthProvider';
 
 export default function Login({navigation}) {
-  // const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,7 +30,8 @@ export default function Login({navigation}) {
         title="Login"
         modeValue="contained"
         labelStyle={styles.loginButtonLabel}
-        // onPress={() => login(email, password)}
+        onPress={() => login(email, password)}
+        // onPress={() => navigation.navigate('Drawer')}
       />
       <FormButton
         title="New user? Join here"
