@@ -92,8 +92,8 @@ export default function DetailChat() {
 
   useEffect(() => {
     const messagesListener = firestore()
-      .collection('THREADS')
-      .doc('CQjwq6f6mL0at9KTC8Z6')
+      .collection('Users')
+      .doc(item.key)
       .collection('MESSAGES')
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
@@ -124,13 +124,15 @@ export default function DetailChat() {
   }, []);
 
   const onSend = useCallback((messages = []) => {
+    //them du lieu hien thi len man  hinh
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages),
     );
     const text = messages[0].text;
+    //luu du lieu vao firestore
     firestore()
-      .collection('THREADS')
-      .doc('CQjwq6f6mL0at9KTC8Z6')
+      .collection('Users')
+      .doc(item.key)
       .collection('MESSAGES')
       .add({
         text,
@@ -142,9 +144,10 @@ export default function DetailChat() {
         },
       });
 
+    //get last mess
     firestore()
-      .collection('THREADS')
-      .doc('CQjwq6f6mL0at9KTC8Z6')
+      .collection('Users')
+      .doc(item.key)
       .set(
         {
           latestMessage: {

@@ -12,35 +12,37 @@ export default function SignupScreen({navigation}) {
   const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.container}>
-      <Title style={styles.titleText}>Register to chat</Title>
-      <FormInput
-        labelName="Email"
-        value={email}
-        autoCapitalize="none"
-        onChangeText={(userEmail) => setEmail(userEmail)}
-      />
-      <FormInput
-        labelName="Password"
-        value={password}
-        secureTextEntry={true}
-        onChangeText={(userPassword) => setPassword(userPassword)}
-      />
-      <FormButton
-        title="Signup"
-        modeValue="contained"
-        labelStyle={styles.loginButtonLabel}
-        onPress={() => register(email, password)}
-        // onPress={() => navigation.navigate('Drawer')}
-      />
-      <IconButton
-        icon="keyboard-backspace"
-        size={30}
-        style={styles.navButton}
-        color="#6646ee"
-        onPress={() => navigation.navigate('Login')}
-      />
-    </View>
+    <AuthProvider>
+      <View style={styles.container}>
+        <Title style={styles.titleText}>Register to chat</Title>
+        <FormInput
+          labelName="Email"
+          value={email}
+          autoCapitalize="none"
+          onChangeText={(userEmail) => setEmail(userEmail)}
+        />
+        <FormInput
+          labelName="Password"
+          value={password}
+          secureTextEntry={true}
+          onChangeText={(userPassword) => setPassword(userPassword)}
+        />
+        <FormButton
+          title="Signup"
+          modeValue="contained"
+          labelStyle={styles.loginButtonLabel}
+          // onPress={async () => await register(email, password)}
+          onPress={() => navigation.navigate('Drawer')}
+        />
+        <IconButton
+          icon="keyboard-backspace"
+          size={30}
+          style={styles.navButton}
+          color="#6646ee"
+          onPress={() => navigation.navigate('Login')}
+        />
+      </View>
+    </AuthProvider>
   );
 }
 

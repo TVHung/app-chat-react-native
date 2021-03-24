@@ -28,7 +28,7 @@ export default function ChatItem({item, pressHandler}) {
               <Text>Feb 24</Text>
             </View>
           </View>
-          <Text style={styles.itemMess}>Old messages</Text>
+          <Text style={styles.itemMess}>{item.latestMessage.text}</Text>
         </View>
       </View>
     </TouchableOpacity>

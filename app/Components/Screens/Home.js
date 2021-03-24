@@ -35,6 +35,7 @@ export default function Home() {
   useEffect(() => {
     const subscriber = firestore()
       .collection('Users')
+      // .orderBy('latestMessage.createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
         const users = [];
         querySnapshot.forEach((documentSnapshot) => {
