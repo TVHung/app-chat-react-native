@@ -70,10 +70,12 @@ function HomeStackScreen({navigation}) {
           ),
           headerRight: () => (
             <Icon.Button
-              name="search"
+              name="user-plus"
               size={25}
               backgroundColor="#66a3ff"
-              onPress={() => {}}></Icon.Button>
+              onPress={() => {
+                navigation.push('Edit');
+              }}></Icon.Button>
           ),
         }}
       />
