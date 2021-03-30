@@ -62,7 +62,7 @@ export default function Home() {
 
   const pressHandlerEdit = () => {
     //cham button chinh sua
-    navigation.push('Edit');
+    // navigation.push('Edit');
   };
 
   var previousOffset = 0; //vị trí cuộn trước đó
