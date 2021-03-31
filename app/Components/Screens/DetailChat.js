@@ -18,6 +18,32 @@ export default function DetailChat() {
   const bs = useRef();
   const fall = new Animated.Value(1);
 
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
+  }
+
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
+  }
+
   function renderInner(){
     return (
       <View style={styles.panel}>
@@ -25,10 +51,10 @@ export default function DetailChat() {
           <Text style={styles.panelTitle}>Upload Photo</Text>
           <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
         </View>
-        <TouchableOpacity style={styles.panelButton} onPress={console.log("takePhotoFromCamera")}>
+        <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
           <Text style={styles.panelButtonTitle}>Take Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.panelButton} onPress={console.log("choosePhotoFromLibrary")}>
+        <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
           <Text style={styles.panelButtonTitle}>Choose From Library</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -72,33 +98,30 @@ export default function DetailChat() {
   }
 
   // function renderComposer(props){
-    // return (
-    //   <View style={{flexDirection: 'row'}}>
-    //     <Composer {...props} />
-    //     <Send {...props}>
-    //       <View style={styles.sendingContainer}>
-    //         <IconButton icon="image" size={32} color="#6646ee" />
-    //       </View>
-    //     </Send>
-    //     <Send {...props}>
-    //       <View style={styles.sendingContainer}>
-    //         <IconButton icon="video" size={32} color="#6646ee" />
-    //       </View>
-    //     </Send>
-    //   </View>
-    // );
+  //   if (!props.text.trim()) { // text box empty
+  //     return (
+  //       <View style={{flexDirection: 'row'}}>
+  //         <Composer {...props} />     
+  //         <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+  //           <View style={styles.sendingContainer}>
+  //             <IconButton icon="image" size={32} color="#6646ee" />
+  //           </View>
+  //         </TouchableOpacity>
+  //       </View>
+  //     );
+  //   }
   // }
 
   //change style icon send
   function renderSend(props) {
     if (!props.text.trim()) { // text box empty
       return (
-        <TouchableOpacity onPress={bs.current.snapTo(0), console.log("bottomsheet open")}>
-          <Send {...props}>
-            <View style={styles.sendingContainer}>
-              <IconButton icon="image" size={32} color="#6646ee" />
+        <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+          {/* <Send {...props}> */}
+            <View>
+              <IconButton icon="image" size={30} color="#6646ee" />
             </View>
-          </Send>
+          {/* </Send> */}
         </TouchableOpacity>
       );
     }
@@ -289,12 +312,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FFFFFF',
     paddingTop: 20,
-    // borderTopLeftRadius: 20,
-    // borderTopRightRadius: 20,
-    // shadowColor: '#000000',
-    // shadowOffset: {width: 0, height: 0},
-    // shadowRadius: 5,
-    // shadowOpacity: 0.4,
   },
   header: {
     backgroundColor: '#FFFFFF',
