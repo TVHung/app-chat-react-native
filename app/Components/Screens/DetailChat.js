@@ -1,17 +1,80 @@
 import {useRoute} from '@react-navigation/core';
 import {IconButton} from 'react-native-paper';
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect, useRef} from 'react';
 import firestore from '@react-native-firebase/firestore';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
-import {GiftedChat, Bubble, Send} from 'react-native-gifted-chat';
+import {View, StyleSheet, ActivityIndicator, TouchableOpacity, Text} from 'react-native';
+import {GiftedChat, Bubble, Send, Composer} from 'react-native-gifted-chat';
 import Header from '../Layout/Header';
-// import Fire from '../../../fire';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { themeColor } from '../Theme/color';
 
 export default function DetailChat() {
   const route = useRoute();
   const {item} = route.params;
-
   const [messages, setMessages] = useState([]);
+  const bs = useRef();
+  const fall = new Animated.Value(1);
+
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
+  }
+
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      this.bs.current.snapTo(1);
+    });
+  }
+
+  function renderInner(){
+    return (
+      <View style={styles.panel}>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.panelTitle}>Upload Photo</Text>
+          <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+        </View>
+        <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
+          <Text style={styles.panelButtonTitle}>Take Photo</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
+          <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.panelButton}
+          onPress={() => bs.current.snapTo(1)}>
+          <Text style={styles.panelButtonTitle}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  function renderHeader(){
+    return (
+      <View style={styles.header}>
+        <View style={styles.panelHeader}>
+          <View style={styles.panelHandle} />
+        </View>
+      </View>
+    );
+  }
 
   //change style box chat
   function renderBubble(props) {
@@ -34,8 +97,34 @@ export default function DetailChat() {
     );
   }
 
+  // function renderComposer(props){
+  //   if (!props.text.trim()) { // text box empty
+  //     return (
+  //       <View style={{flexDirection: 'row'}}>
+  //         <Composer {...props} />     
+  //         <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+  //           <View style={styles.sendingContainer}>
+  //             <IconButton icon="image" size={32} color="#6646ee" />
+  //           </View>
+  //         </TouchableOpacity>
+  //       </View>
+  //     );
+  //   }
+  // }
+
   //change style icon send
   function renderSend(props) {
+    if (!props.text.trim()) { // text box empty
+      return (
+        <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+          {/* <Send {...props}> */}
+            <View>
+              <IconButton icon="image" size={30} color="#6646ee" />
+            </View>
+          {/* </Send> */}
+        </TouchableOpacity>
+      );
+    }
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
@@ -90,8 +179,6 @@ export default function DetailChat() {
     //     setMessages(dataArr);
     //   }, []);
   };
-
-  
 
   useEffect(() => {
     const messagesListener = firestore()
@@ -165,6 +252,18 @@ export default function DetailChat() {
   return (
     <View style={{flex: 1}}>
       <Header item={item} />
+      <BottomSheet
+        ref={bs}
+        snapPoints={[330, 0]}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+      />
+      <Animated.View style={{margin: 20,
+        opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)),
+      }} />
       <GiftedChat
         messages={messages}
         onSend={(messages) => onSend(messages)}
@@ -181,7 +280,7 @@ export default function DetailChat() {
         scrollToBottomComponent={scrollToBottomComponent}
         renderLoading={renderLoading}
         keyboardShouldPersistTaps='never'
-        
+        // renderComposer={renderComposer}
       />
     </View>
   );
@@ -200,5 +299,61 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  commandButton: {
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#FF6347',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  panel: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+  },
+  header: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#333333',
+    shadowOffset: {width: -1, height: -3},
+    shadowRadius: 2,
+    shadowOpacity: 0.4,
+    // elevation: 5,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  panelHeader: {
+    alignItems: 'center',
+  },
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00000040',
+    marginBottom: 10,
+  },
+  panelTitle: {
+    fontSize: 27,
+    height: 35,
+  },
+  panelSubtitle: {
+    fontSize: 14,
+    color: 'gray',
+    height: 30,
+    marginBottom: 10,
+  },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: themeColor,
+    alignItems: 'center',
+    marginVertical: 7,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
   },
 });

@@ -25,7 +25,7 @@ export default function ChatItem({item, pressHandler}) {
                 <Icon name="check" size={20} color="#13bd27" />
                 {/* <Icon style={iconDot} name="circle" size={10} color="#13bd27" /> */}
               </Text>
-              <Text>Feb 24</Text>
+              <Text>{item.latestMessage.createAt}</Text>
             </View>
           </View>
           <Text style={styles.itemMess}>{item.latestMessage.text}</Text>
