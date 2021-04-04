@@ -9,38 +9,40 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import ImagePicker from 'react-native-image-crop-picker';
 import { themeColor } from '../Theme/color';
 
 export default function DetailChat() {
   const route = useRoute();
   const {item} = route.params;
+  const [image, setImage] = useState();
   const [messages, setMessages] = useState([]);
   const bs = useRef();
   const fall = new Animated.Value(1);
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
-      compressImageMaxWidth: 300,
+      compressImageMaxWidth: 400,
       compressImageMaxHeight: 300,
       cropping: true,
       compressImageQuality: 0.7
     }).then(image => {
       console.log(image);
       setImage(image.path);
-      this.bs.current.snapTo(1);
+      bs.current.snapTo(1);
     });
   }
 
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
-      width: 300,
+      width: 400,
       height: 300,
       cropping: true,
       compressImageQuality: 0.7
     }).then(image => {
       console.log(image);
       setImage(image.path);
-      this.bs.current.snapTo(1);
+      bs.current.snapTo(1);
     });
   }
 
@@ -114,7 +116,7 @@ export default function DetailChat() {
 
   //change style icon send
   function renderSend(props) {
-    if (!props.text.trim()) { // text box empty
+    if (!props.text.trim() && image == null ) { // text box empty
       return (
         <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
           {/* <Send {...props}> */}
@@ -232,6 +234,7 @@ export default function DetailChat() {
           email: item.email,
           avatar: item.avatar,
         },
+        image: image
       });
 
     //get last mess
@@ -247,6 +250,7 @@ export default function DetailChat() {
         },
         {merge: true},
       );
+    setImage(null);
   }, []);
 
   return (
@@ -274,13 +278,16 @@ export default function DetailChat() {
         }}
         renderBubble={renderBubble}
         placeholder="Type your message here..."
-        // showUserAvatar
+        showUserAvatar
         alwaysShowSend
         renderSend={renderSend}
         scrollToBottomComponent={scrollToBottomComponent}
         renderLoading={renderLoading}
         keyboardShouldPersistTaps='never'
         // renderComposer={renderComposer}
+        user={{_id: item.id,
+              name: item.name,
+              avatar: image}}
       />
     </View>
   );

@@ -8,6 +8,8 @@ target 'newtest' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'newtestTests' do
     inherit! :complete
     # Pods for testing
