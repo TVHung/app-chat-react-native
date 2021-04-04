@@ -15,7 +15,7 @@ import { themeColor } from '../Theme/color';
 export default function DetailChat() {
   const route = useRoute();
   const {item} = route.params;
-  const [image, setImage] = useState('https://api.adorable.io/avatars/80/abott@adorable.png');
+  const [image, setImage] = useState();
   const [messages, setMessages] = useState([]);
   const bs = useRef();
   const fall = new Animated.Value(1);
@@ -116,7 +116,7 @@ export default function DetailChat() {
 
   //change style icon send
   function renderSend(props) {
-    if (!props.text.trim()) { // text box empty
+    if (!props.text.trim() && image == null ) { // text box empty
       return (
         <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
           {/* <Send {...props}> */}
@@ -250,6 +250,7 @@ export default function DetailChat() {
         },
         {merge: true},
       );
+    setImage(null);
   }, []);
 
   return (
@@ -277,13 +278,16 @@ export default function DetailChat() {
         }}
         renderBubble={renderBubble}
         placeholder="Type your message here..."
-        // showUserAvatar
+        showUserAvatar
         alwaysShowSend
         renderSend={renderSend}
         scrollToBottomComponent={scrollToBottomComponent}
         renderLoading={renderLoading}
         keyboardShouldPersistTaps='never'
         // renderComposer={renderComposer}
+        user={{_id: item.id,
+              name: item.name,
+              avatar: image}}
       />
     </View>
   );
