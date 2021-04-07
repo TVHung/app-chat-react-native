@@ -3,7 +3,7 @@ import {IconButton} from 'react-native-paper';
 import React, {useCallback, useState, useEffect, useRef} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {View, StyleSheet, ActivityIndicator, TouchableOpacity, Text} from 'react-native';
-import {GiftedChat, Bubble, Send, Composer} from 'react-native-gifted-chat';
+import {GiftedChat, Bubble, Send, Composer, InputToolbar } from 'react-native-gifted-chat';
 import Header from '../Layout/Header';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
@@ -27,7 +27,6 @@ export default function DetailChat() {
       cropping: true,
       compressImageQuality: 0.7
     }).then(image => {
-      console.log(image);
       setImage(image.path);
       bs.current.snapTo(1);
     });
@@ -37,11 +36,11 @@ export default function DetailChat() {
     ImagePicker.openPicker({
       width: 400,
       height: 300,
-      cropping: true,
+      cropping: false,
       compressImageQuality: 0.7
     }).then(image => {
-      console.log(image);
       setImage(image.path);
+      console.log("get link: " + image.path);
       bs.current.snapTo(1);
     });
   }
@@ -99,41 +98,46 @@ export default function DetailChat() {
     );
   }
 
-  // function renderComposer(props){
-  //   if (!props.text.trim()) { // text box empty
-  //     return (
-  //       <View style={{flexDirection: 'row'}}>
-  //         <Composer {...props} />     
-  //         <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
-  //           <View style={styles.sendingContainer}>
-  //             <IconButton icon="image" size={32} color="#6646ee" />
-  //           </View>
-  //         </TouchableOpacity>
-  //       </View>
-  //     );
-  //   }
-  // }
+  function renderComposer(props){
+      return (
+        <View style={{flexDirection: 'row'}}>
+          <Composer {...props} />     
+          <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+            <View style={styles.imageBtn}>
+                <IconButton icon="image" size={32} color="#6646ee" />
+              </View>
+          </TouchableOpacity>
+          <Send {...props}>
+              <View style={styles.sendingContainer}>
+                <IconButton icon="send-circle" size={32} color="#6646ee" />
+              </View>
+          </Send>
+        </View>
+      );
+  }
 
   //change style icon send
   function renderSend(props) {
-    if (!props.text.trim() && image == null ) { // text box empty
-      return (
-        <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
-          {/* <Send {...props}> */}
-            <View>
-              <IconButton icon="image" size={30} color="#6646ee" />
-            </View>
-          {/* </Send> */}
-        </TouchableOpacity>
-      );
-    }
     return (
-      <Send {...props}>
-        <View style={styles.sendingContainer}>
-          <IconButton icon="send-circle" size={32} color="#6646ee" />
-        </View>
-      </Send>
+      <View style={{flexDirection: 'row'}}>
+        <Composer {...props} />     
+        <TouchableOpacity onPress={() => {bs.current.snapTo(0)}}>
+          <View style={styles.imageBtn}>
+              <IconButton icon="image" size={32} color="#6646ee" />
+            </View>
+        </TouchableOpacity>
+        <Send {...props}>
+            <View style={styles.sendingContainer}>
+              <IconButton icon="send-circle" size={32} color="#6646ee" />
+            </View>
+        </Send>
+      </View>
     );
+  }
+
+  function renderInputToolbar (props) {
+    //Add the extra styles via containerStyle
+    return <InputToolbar {...props} containerStyle={{borderTopColor: '#333'}} />
   }
 
   //change style scroll
@@ -217,10 +221,12 @@ export default function DetailChat() {
 
   const onSend = useCallback((messages = []) => {
     //them du lieu hien thi len man  hinh
+    console.log("Link: " + image);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages),
     );
     const text = messages[0].text;
+    console.log("Duong dan: " + image);
     //luu du lieu vao firestore
     firestore()
       .collection('Users')
@@ -251,7 +257,7 @@ export default function DetailChat() {
         {merge: true},
       );
     setImage(null);
-  }, []);
+  }, [image]);
 
   return (
     <View style={{flex: 1}}>
@@ -285,9 +291,8 @@ export default function DetailChat() {
         renderLoading={renderLoading}
         keyboardShouldPersistTaps='never'
         // renderComposer={renderComposer}
-        user={{_id: item.id,
-              name: item.name,
-              avatar: image}}
+        // isCustomViewBottom={false}
+        // renderInputToolbar={renderInputToolbar} 
       />
     </View>
   );
@@ -297,6 +302,13 @@ const styles = StyleSheet.create({
   sendingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 30,
+    // backgroundColor: 'red', 
+  },
+  imageBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'red',
   },
   bottomComponentContainer: {
     justifyContent: 'center',
